@@ -11,7 +11,7 @@ pub async fn save_dog(image: String) -> Result<(), ServerFnError> {
         .open("dogs.txt")
         .unwrap();
 
-    file.write_fmt(format_args!("{image}\n"));
+    _ = file.write_fmt(format_args!("{image}\n"));
 
     Ok(())
 }
