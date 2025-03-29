@@ -40,13 +40,11 @@ fn DogView() -> Element {
     let mut img_src_resource = use_resource(fetch_dog_image);
     let mut is_saving = use_signal(|| false);
 
-    let fetch_new = move || {
+    let mut fetch_new = move || {
         img_src_resource.restart();
     };
 
     let mut handle_save_dog = move || {
-        let mut fetch_new = fetch_new.clone();
-
         if let Some(img_src) = img_src_resource.cloned() {
             is_saving.set(true);
 
@@ -58,6 +56,10 @@ fn DogView() -> Element {
                 fetch_new();
             });
         }
+    };
+
+    let mut handle_skip_dog = move || {
+        img_src_resource.restart();
     };
 
     let img_src = img_src_resource.cloned().unwrap_or_default();
@@ -76,7 +78,7 @@ fn DogView() -> Element {
             button {
                 id: "skip",
                 disabled: is_busy,
-                onclick: move |_| img_src_resource.restart(),
+                onclick: move |_| handle_skip_dog(),
                 "#skip"
             }
             button {
